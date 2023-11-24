@@ -1,0 +1,3 @@
+module equalsums
+
+go 1.21.0
