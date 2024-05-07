@@ -1,13 +1,13 @@
 package equalsums
 
 import (
-	"math/rand"
+	"math/rand/v2"
 	"testing"
 )
 
 func testSolve(t testing.TB) {
 	numbers := []int{738, 408, 588, 559, 976, 120, 713, 95, 620}
-	r := rand.New(rand.NewSource(42))
+	r := rand.New(rand.NewPCG(42, 42))
 	sub1, sub2 := Solve(numbers, r)
 
 	if eq(sub1, sub2) {

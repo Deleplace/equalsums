@@ -1,7 +1,7 @@
 package equalsums
 
 import (
-	"math/rand"
+	"math/rand/v2"
 	"sort"
 )
 
