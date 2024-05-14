@@ -2,15 +2,13 @@ package equalsums
 
 import (
 	"bytes"
-	"math/rand/v2"
+	"math/rand"
+	randv2 "math/rand/v2"
 	"testing"
 )
 
-func testSolve(t testing.TB) {
+func testSolve(t testing.TB, r shuffler) {
 	numbers := []int{738, 408, 588, 559, 976, 120, 713, 95, 620}
-	var seed [32]byte
-	copy(seed[:], bytes.Repeat(nil, 42))
-	r := rand.New(rand.NewChaCha8(seed))
 	sub1, sub2 := Solve(numbers, r)
 
 	if eq(sub1, sub2) {
@@ -23,11 +21,31 @@ func testSolve(t testing.TB) {
 }
 
 func TestSolve(t *testing.T) {
-	testSolve(t)
+	r := rand.New(rand.NewSource(42))
+	testSolve(t, r)
 }
 
-func BenchmarkSolve(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		testSolve(b)
+func BenchmarkSolveRand(b *testing.B) {
+	for range b.N {
+		r := rand.New(rand.NewSource(42))
+		testSolve(b, r)
+	}
+}
+
+func BenchmarkSolveChaCha8(b *testing.B) {
+	for range b.N {
+		var seed [32]byte
+		copy(seed[:], bytes.Repeat([]byte{42}, 32))
+		r := randv2.New(randv2.NewChaCha8(seed))
+		testSolve(b, r)
+	}
+}
+
+func BenchmarkSolvePCG(b *testing.B) {
+	for range b.N {
+		var seed [32]byte
+		copy(seed[:], bytes.Repeat([]byte{42}, 32))
+		r := randv2.New(randv2.NewPCG(42, 42))
+		testSolve(b, r)
 	}
 }

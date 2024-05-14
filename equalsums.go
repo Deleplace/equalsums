@@ -1,11 +1,10 @@
 package equalsums
 
 import (
-	"math/rand/v2"
 	"sort"
 )
 
-func Solve(numbers []int, r *rand.Rand) (subset1 []int, subset2 []int) {
+func Solve(numbers []int, r shuffler) (subset1 []int, subset2 []int) {
 
 	memo := map[int][]int{}
 
@@ -29,6 +28,11 @@ func Solve(numbers []int, r *rand.Rand) (subset1 []int, subset2 []int) {
 			memo[s] = clone(numbers[:k])
 		}
 	}
+}
+
+// shuffler is implemented by *math/rand.Rand and *math/rand/v2.Rand
+type shuffler interface {
+	Shuffle(n int, swap func(i, j int))
 }
 
 func sum(a []int) int {
